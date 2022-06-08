@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: spring-tracing-app1
+  name: spring-tracing-app1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-tracing-app1
+  template:
+    metadata:
+      labels:
+        app: spring-tracing-app1
+    spec:
+      containers:
+        - image: spring-tracing-app1:latest
+          imagePullPolicy: Never
+          name: spring-tracing-app1
+          ports:
+            - containerPort: 7001
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-tracing-app1
+spec:
+  selector:
+    app: spring-tracing-app1
+  ports:
+    - name: http
+      port: 80
+      targetPort: 7001
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  name: spring-tracing-app1
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: k8s.karsei.io
+      http:
+        paths:
+          - backend:
+              service:
+                name: spring-tracing-app1
+                port:
+                  number: 7001
+            path: /tracing(/|$)(.*)
+            pathType: Prefix
+status:
+  loadBalancer:
+    ingress:
+      - ip: 192.168.205.2

@@ -34,11 +34,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 //    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 //    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation ('org.springframework.cloud:spring-cloud-starter-sleuth') {
-        exclude group: 'org.springframework.cloud', module: 'spring-cloud-sleuth-brave'
-    }
-    implementation 'org.springframework.cloud:spring-cloud-sleuth-otel-autoconfigure'
-    implementation 'io.opentelemetry:opentelemetry-exporter-jaeger'
+    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+    implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
 
     //runtimeOnly 'com.h2database:h2'
 
